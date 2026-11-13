@@ -18,3 +18,5 @@ button:disabled { cursor: default; color: #52705b; }
 #status { color: #6d4a00; }
 [data-testid="build-sha"] { overflow-wrap: anywhere; }
 @media (max-width: 760px) { .row { grid-template-columns: 1fr auto; } .row .what { grid-column: 1 / -1; } .row time { font-size: 13px; } }
+
+.new-bar-slot { height: 48px; }

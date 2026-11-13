@@ -13,7 +13,7 @@ what just broke and takes it.
 
 ## Requirements
 
-- **R1** New incidents appear live at the top of the list, newest first.
+- **R1** Visible incident rows hold still. Poll every two seconds, buffer unseen incidents, and show an N new button (data-testid="new-bar"). Clicking it inserts buffered incidents newest first. Reserve space for the button so it never shifts the rows. Ack stays bound to its incident ID.
 - **R2** Each incident row has an **Ack** button. Ack sends the ack (`api.ack(id)`) and marks the row acked.
 - **R3** Show a loader until incidents load.
 - **R4** The board refreshes itself every 2 seconds while open.

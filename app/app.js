@@ -6,6 +6,19 @@ const status = document.querySelector('#status');
 const rows = new Map();
 const acknowledged = new Set();
 let refreshing = false;
+let loaded = false;
+const pending = new Map();
+const known = new Map();
+const newBar = document.querySelector('[data-testid="new-bar"]');
+function updateBar() {
+  newBar.textContent = `${pending.size} new`;
+  newBar.hidden = pending.size === 0;
+}
+newBar.addEventListener('click', () => {
+  render([...known.values()]);
+  pending.clear();
+  updateBar();
+});
 const formatter = new Intl.DateTimeFormat(navigator.language, {
   day: '2-digit', month: '2-digit', year: 'numeric',
   hour: '2-digit', minute: '2-digit', second: '2-digit',
@@ -68,7 +81,16 @@ async function refresh() {
   refreshing = true;
   try {
     const page = await fetchIncidents();
-    render(page.incidents);
+    for (const incident of page.incidents) known.set(incident.id, incident);
+    if (!loaded) {
+      render(page.incidents);
+      loaded = true;
+    } else {
+      for (const incident of page.incidents) {
+        if (!rows.has(incident.id)) pending.set(incident.id, incident);
+      }
+      updateBar();
+    }
     loader.hidden = true; list.hidden = false;
     if (status.dataset.error) { status.textContent = 'Connection restored.'; delete status.dataset.error; }
   } catch {
